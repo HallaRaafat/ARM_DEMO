@@ -379,25 +379,19 @@ void USART1_IRQHandler(void)
 				   USART_Ptr->DR  = (TxReq[REQ_IDX].data[TxReq[REQ_IDX].Pos]);
 				   //increment pos
 				   TxReq[REQ_IDX].Pos++;
+				   if(TxReq[REQ_IDX].Pos == TxReq[REQ_IDX].Size){
+						//disable inturrpt
+						USART_Ptr->CR1&=~ USART_TXIE_ENABLE_MASK;
+						// TXreq ready
+						TxReq[REQ_IDX].state=STATE_READY;
+						//call callback func
+							if(TxReq[REQ_IDX].CB!=NULL)
+							{
+								TxReq[REQ_IDX].CB();
+							}
+
+				   }
 			   }
-			   else
-			   {
-
-				   //disable inturrpt
-				   USART_Ptr->CR1&=~ USART_TXIE_ENABLE_MASK;
-				   // TXreq ready
-				   TxReq[REQ_IDX].state=STATE_READY;
-				   //call callback func
-					if(TxReq[REQ_IDX].CB!=NULL)
-					{
-						TxReq[REQ_IDX].CB();
-					}
-
-			   }
-
-		   }
-		   else
-		   {
 
 		   }
 
@@ -417,11 +411,8 @@ void USART1_IRQHandler(void)
 	 				 RxReq[REQ_IDX].data[RxReq[REQ_IDX].Pos]=(uint8_t)USART_Ptr-> DR  ;
 	 				   //increment pos
 	 				   RxReq[REQ_IDX].Pos++;
-	 			   }
-	 			   else
-	 			   {
-
-	 				   //disable inturrpt
+					   if(RxReq[REQ_IDX].Pos == RxReq[REQ_IDX].Size){
+						//disable inturrpt
 	 				   USART_Ptr->CR1&=~ USART_RXNEIE_ENABLE_MASK;
 	 				   // TXreq ready
 	 				   RxReq[REQ_IDX].state=STATE_READY;
@@ -430,17 +421,11 @@ void USART1_IRQHandler(void)
 	 					{
 	 						RxReq[REQ_IDX].CB();
 	 					}
-
+					   }
 	 			   }
 
-	 		   }
-	 		   else
-	 		   {
-
-	 		   }
-
 	 		}
-
+		}
 
 
 }
@@ -628,7 +613,7 @@ void USART6_IRQHandler(void)
 
 		 		}
 
-
+	
 }
 
 /*
