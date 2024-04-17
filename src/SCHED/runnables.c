@@ -21,17 +21,17 @@ void getPressed(void);
 void Hsw_task(void);
 void Lcd_task(void);
 void updateState();
-
+void recieveKey(void);
 
 const runnable_t runnables[_runsNum] = {
-    // [updateTime] = {
-    //     .period_mS = 1,
-    //     .callBck = App_task
-    // },
     [display_run] = {
         /*  */
         .period_mS = 6,
         .callBck = updateTime
+    },
+    [rec_run] = {
+        .period_mS = 3,
+        .callBck = recieveKey
     },
     [updateState_] = {
         .period_mS = 35,

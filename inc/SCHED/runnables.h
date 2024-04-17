@@ -16,6 +16,7 @@
 /*****************************************************************************/
 typedef enum {
     display_run,
+    rec_run,
     updateState_,
     getPressed_run,
     hsw_task,

@@ -69,8 +69,20 @@ void decCursor(){
 static uint8_t numToAscii(uint8_t num){
     return num + 48;
 }
-
+uint8_t rbuf;
+void rcb(){
+    if((rbuf > 0) && (rbuf < _swsNum)){
+        pressedKey_id = rbuf;
+    }
+}
 void updateState(){
+
+    // User_Request_t Rx;
+    // Rx.Ptr_Buffer = &rbuf;
+ 	// Rx.USART_Num = USART_1;
+ 	// Rx.CallBack = rcb;
+    // Rx.Length = 1;
+
     // USART_ReceiveBufferAsync(&Rx);
     switch(state){
         case APP_STATE_CLOCK:
@@ -264,14 +276,14 @@ void updateState(){
     }
     // USART_ReceiveBufferAsync(&Rx);
 }
-void tx_cbf(){
-    // User_Request_t Tx;
-    // uint8_t tx_cb = 0x05;
-    // Tx.Ptr_Buffer = &tx_cb;
-    // Tx.USART_Num = USART_1;
-    // Tx.CallBack = tx_cbf;
-    // Tx.Length = 1;
-    // USART_SendBufferAsync(&Tx);
+
+void recieveKey(void){
+    User_Request_t Rx;
+    Rx.Ptr_Buffer = &rbuf;
+ 	Rx.USART_Num = USART_1;
+ 	Rx.CallBack = rcb;
+    Rx.Length = 1;
+    USART_ReceiveBufferAsync(&Rx);
 }
 
 void rx_cbf(){
@@ -377,9 +389,6 @@ int main(){
     nvic_enableInt(IRQ_USART1);
 
     
-
-
-
     User_Request_t Tx1;
     uint8_t t2[2] = {'t',' '};
 	Tx1.Ptr_Buffer = t2;
@@ -387,11 +396,7 @@ int main(){
 	Tx1.CallBack = cb;
     Tx1.Length = 1;
 
-//  User_Request_t Rx;
-//     Rx.Ptr_Buffer=t2;
-//  	Rx.USART_Num=USART_1;
-//  	Rx.CallBack=cb;
-//     Rx.Length=1;
+
 
 	USART_Init();
 	
