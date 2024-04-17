@@ -7,6 +7,7 @@
 
 #include "MCAL/USART/USART.h"
 #include "MCAL/USART/USART_Cfg.h"
+#include "stdint.h"
 #define NULL (void*)0
 
 #define USART1_G_IDX     0
@@ -375,7 +376,7 @@ void USART1_IRQHandler(void)
 			   if (TxReq[REQ_IDX].Pos< TxReq[REQ_IDX].Size)
 			   {
 				   //send current pos
-				   USART_Ptr-> DR  =(TxReq[REQ_IDX].data[TxReq[REQ_IDX].Pos]);
+				   USART_Ptr->DR  = (TxReq[REQ_IDX].data[TxReq[REQ_IDX].Pos]);
 				   //increment pos
 				   TxReq[REQ_IDX].Pos++;
 			   }

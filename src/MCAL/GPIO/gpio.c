@@ -104,8 +104,8 @@ uint8_t gpio_initPin(gpioPin_t* pinCfg) {
     CAST(pinCfg->port)->OSPEEDR &= clrMask;
     CAST(pinCfg->port)->OSPEEDR |= setMask;
 
-    CAST(pinCfg->port)->AFR[pinCfg->pin / 8] &= ~(AF_MASK << (pinCfg->pin % 8));
-    CAST(pinCfg->port)->AFR[pinCfg->pin / 8] |= (pinCfg->af << (pinCfg->pin % 8));
+    CAST(pinCfg->port)->AFR[pinCfg->pin / 8] &= ~(AF_MASK << (pinCfg->pin % 8)*4);
+    CAST(pinCfg->port)->AFR[pinCfg->pin / 8] |= (pinCfg->af << ((pinCfg->pin % 8)*4));
 
     errorStatus = RETURN_GPIO_OK;
 

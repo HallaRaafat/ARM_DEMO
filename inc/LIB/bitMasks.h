@@ -1,6 +1,8 @@
 #ifndef  BITMASK_H_
 #define  BITMASK_H_
 
+#define NULL (void*)0
+
 #define BIT0_MASK   0x1
 #define BIT1_MASK   0x2
 #define BIT2_MASK   0x4

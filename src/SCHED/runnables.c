@@ -39,7 +39,7 @@ const runnable_t runnables[_runsNum] = {
     },
     [getPressed_run] = {
         /* looping over switches and updating currently pressed */
-        .period_mS = 50,
+        .period_mS = 40,
         .callBck = getPressed
     },
     [hsw_task] = {

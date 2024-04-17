@@ -9,7 +9,7 @@
 #define USART_H_
 
 #include "MCAL/USART/USART_Cfg.h"
-#include <stdint.h>
+#include "stdint.h"
 
 /***********************************************/
 /******         Defines           **************/

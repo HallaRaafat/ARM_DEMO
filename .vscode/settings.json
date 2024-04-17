@@ -1,9 +1,10 @@
 {
     "files.associations": {
-        "h_sw.h": "c",
+        "gpio_defines.h": "c",
+        "bitmasks.h": "c",
+        "app.h": "c",
+        "gpio.h": "c",
         "sched.h": "c",
-        "app_defines.h": "c",
-        "stdint.h": "c",
-        "stdint-gcc.h": "c"
+        "led_cfg.h": "c"
     }
 }

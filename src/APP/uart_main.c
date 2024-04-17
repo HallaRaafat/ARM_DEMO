@@ -1,4 +1,6 @@
-#include"APP/app_defines.h"
+#if(APP == UART_APP)
+
+#include"APP/app.h"
 
 #include"SCHED/sched.h"
 
@@ -12,23 +14,22 @@
 
 #include"MCAL/USART/USART.h"
 
-void incCursor();
-void decCursor();
-/*****************************************************************************/
-/*                              Module Task                                  */
-/*****************************************************************************/
+
+#define APP_STATE_CLOCK                 0
+#define APP_STATE_STOPWATCH             1
+
+#define CLOCK_STATE_DISPLAY             2
+#define CLOCK_STATE_EDIT                3
+#define STOPWATCH_STATE_RESET           4
+#define STOPWATCH_STATE_RUN             5
+#define STOPWATCH_STATE_PAUSE           6
+
+
 uint8_t state = APP_STATE_CLOCK;
 uint8_t stopwatchState = STOPWATCH_STATE_RESET;
 uint8_t clockState = CLOCK_STATE_DISPLAY;
 
 uint8_t pressedKey_id = _swsNum;
-uint8_t pressedKey_sendId = _swsNum;
-
-User_Request_t Tx;
-User_Request_t Rx;
-
-uint8_t Tx_buf[1] = {_swsNum};
-uint8_t Rx_buf[1] = {_swsNum};
 
 uint64_t timestamp = 0;
 uint64_t stopwatchTime = 0;
@@ -36,16 +37,11 @@ uint64_t stopwatchTime = 0;
 uint8_t hrs;
 uint8_t min;
 uint8_t sec;
-// uint8_t day;
-// uint8_t month;
-// uint8_t year;
 
 uint8_t i_cursor = 0;
 
 uint8_t clock[32] = "Date 12-04-2024 Clock 00:00:00  ";
 uint8_t stopwatch[32] = "  00:00:00.00                   ";
-
-#define NULL    (void *)0
 
 void lcdCBF(){
     lcd_setCursorAsync(i_cursor%16,i_cursor/16,NULL);
@@ -75,7 +71,7 @@ static uint8_t numToAscii(uint8_t num){
 }
 
 void updateState(){
-    USART_ReceiveBufferAsync(&Rx);
+    // USART_ReceiveBufferAsync(&Rx);
     switch(state){
         case APP_STATE_CLOCK:
             clock[22] = numToAscii(hrs / 10);
@@ -266,44 +262,24 @@ void updateState(){
             }   
             break;     
     }
-    USART_ReceiveBufferAsync(&Rx);
+    // USART_ReceiveBufferAsync(&Rx);
 }
-
-/* work at released */
-void getPressed(){
-    uint8_t SW_state = SW_STATE_RELEASED;
-    static uint8_t prev_pressed = _swsNum;
-    uint8_t pressed_flag = 0;
-    for(uint8_t i = 0; i < _swsNum; i++){
-        hsw_getState(i,&SW_state);
-        if(SW_state == SW_STATE_PRESSED){
-            pressed_flag = 1;
-            prev_pressed = i;
-        }
-    }
-    if(pressed_flag ||(prev_pressed == _swsNum)){
-        pressedKey_sendId = _swsNum;
-    }
-    else if((!pressed_flag) && (prev_pressed != _swsNum)) { /* currently sw released but previously was pressed */
-        hsw_getState(prev_pressed,&SW_state);
-        if(SW_state == SW_STATE_RELEASED){
-            pressedKey_sendId = prev_pressed;
-            Tx.Ptr_Buffer[0] = prev_pressed;
-            USART_SendBufferAsync(&Tx);
-            prev_pressed = _swsNum;
-        }
-    }
-}
-
 void tx_cbf(){
-    Tx.Ptr_Buffer[0] = _swsNum;
+    // User_Request_t Tx;
+    // uint8_t tx_cb = 0x05;
+    // Tx.Ptr_Buffer = &tx_cb;
+    // Tx.USART_Num = USART_1;
+    // Tx.CallBack = tx_cbf;
+    // Tx.Length = 1;
+    // USART_SendBufferAsync(&Tx);
 }
 
 void rx_cbf(){
-    if(Rx.Ptr_Buffer[0] != _swsNum) {
-        pressedKey_id = Rx.Ptr_Buffer[0];
-    }
+    // if(Rx_buf[0] != _swsNum) {
+    //     pressedKey_id = Rx_buf[0];
+    // }
 }
+
 
 void updateTime(){
     timestamp += 6;
@@ -315,29 +291,68 @@ void updateTime(){
     }
 }
 
+uint8_t flag = 0;
+void cb(){
+    flag = 1;
+    // getPressed();
+}
 
-/*****************************************************************************/
-/*                                  Main                                     */
-/*****************************************************************************/
-int main() {
-    
+/* work at released */
+void getPressed(){
+    uint8_t pressedKey_sendId = _swsNum;
+    uint8_t SW_state = SW_STATE_RELEASED;
+    static uint8_t prev_pressed = _swsNum;
+
+    User_Request_t Tx;
+    Tx.Ptr_Buffer = &pressedKey_sendId;
+    Tx.USART_Num = USART_1;
+    Tx.CallBack = cb;
+    Tx.Length = 1;
+
+    uint8_t pressed_flag = 0;
+
+    for(uint8_t i = 0; i < _swsNum; i++){
+        hsw_getState(i,&SW_state);
+        if(SW_state == SW_STATE_PRESSED){
+            pressed_flag = 1;
+            prev_pressed = i;
+        }
+    }
+    if(pressed_flag ||(prev_pressed == _swsNum)){
+        // USART_SendBufferAsync(&Tx);
+        // pressedKey_id = pressedKey_sendId;
+        pressedKey_sendId = _swsNum;
+        pressedKey_id = _swsNum;
+    }
+    else if((!pressed_flag) && (prev_pressed != _swsNum)) { /* currently sw released but previously was pressed */
+        hsw_getState(prev_pressed,&SW_state);
+        if(SW_state == SW_STATE_RELEASED){
+            pressedKey_sendId = prev_pressed /*+ '0'*/;
+            pressedKey_id = prev_pressed;
+            USART_SendBufferAsync(&Tx);
+            prev_pressed = _swsNum;
+        }
+    } 
+}
+
+int main(){
+
     rcc_enableClk(CLOCK_HSI);
     uint8_t res;
     rcc_getClkStatus(CLOCK_HSI,&res);
     while(res != CLK_READY);
     rcc_selectSysClk(SYSCLK_HSI);
-    // rcc_configAHB(AHB_PRE_1);
+    // rcc_configAHB(AHB_PRE_2);
     rcc_controlAHB1Peripheral(AHB1_PERIPH_GPIOA,PERIPH_STATE_ENABLED);
     rcc_controlAHB1Peripheral(AHB1_PERIPH_GPIOB,PERIPH_STATE_ENABLED);
     rcc_controlAHB1Peripheral(AHB1_PERIPH_GPIOC,PERIPH_STATE_ENABLED);
     rcc_controlAHB1Peripheral(AHB1_PERIPH_GPIOD,PERIPH_STATE_ENABLED);
     
-    hsw_init();
-    lcd_initAsync();
-
     rcc_controlAPB2Peripheral(APB2_PERIPH_USART1,PERIPH_STATE_ENABLED);
     
-
+    uint8_t x='Y';
+	uint8_t z=0;
+	uint8_t Arr[7]={'S','a','l','l','o','m',' '};
 	gpioPin_t UART_PINS[2]={
 			//tx
 			[0]= {
@@ -362,22 +377,33 @@ int main() {
     nvic_enableInt(IRQ_USART1);
 
     
-	Tx.Ptr_Buffer = Tx_buf;
-	Tx.USART_Num = USART_1;
-	Tx.CallBack = tx_cbf;
-    Tx.Length = 1;
 
-    Rx.Ptr_Buffer = Rx_buf;
- 	Rx.USART_Num = USART_1;
- 	Rx.CallBack = rx_cbf;
-    Rx.Length = 1;
 
-    // USART_SendBufferAsync(&Tx);
 
-    USART_Init();
+    User_Request_t Tx1;
+    uint8_t t2[2] = {'t',' '};
+	Tx1.Ptr_Buffer = t2;
+	Tx1.USART_Num = USART_1;
+	Tx1.CallBack = cb;
+    Tx1.Length = 1;
+
+//  User_Request_t Rx;
+//     Rx.Ptr_Buffer=t2;
+//  	Rx.USART_Num=USART_1;
+//  	Rx.CallBack=cb;
+//     Rx.Length=1;
+
+	USART_Init();
+	
+	
+USART_SendBufferAsync(&Tx1);
+// USART_ReceiveBufferAsync(&Rx);
+	
+    hsw_init();
+    lcd_initAsync();
 
     sched_init();
     sched_start();
 
 }
-
+#endif
