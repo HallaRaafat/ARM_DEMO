@@ -15,12 +15,12 @@
 /*                              Types                                        */
 /*****************************************************************************/
 typedef enum {
-    display_run,
-    rec_run,
-    updateState_,
-    getPressed_run,
-    hsw_task,
-    lcd_task,
+    timeUpdate_runID,
+    usartRx_runID,
+    appSM_runID,
+    pressedKeyTx_runID,
+    hsw_runID,
+    lcd_runID,
     _runsNum
 }runnables_t;
 

@@ -7,7 +7,7 @@
 /*****************************************************************************/
 /*                              Defines                                      */
 /*****************************************************************************/
-
+#define SW_READINGS_COUNT       5
 
 /*****************************************************************************/
 /*                              Types                                        */
@@ -43,7 +43,7 @@ void Hsw_task(){
             else {
                 swData[i].count = 0;
             }
-            if(swData[i].count == 5) {
+            if(swData[i].count == SW_READINGS_COUNT) {
                 swData[i].state = swData[i].prev ^ switches[i].sw_connection;
             }
             swData[i].prev = current;
