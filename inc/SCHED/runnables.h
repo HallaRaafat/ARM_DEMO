@@ -16,7 +16,7 @@
 /*****************************************************************************/
 typedef enum {
     timeUpdate_runID,
-    usartRx_runID,
+    pressedKeyRx_runID,
     appSM_runID,
     pressedKeyTx_runID,
     hsw_runID,

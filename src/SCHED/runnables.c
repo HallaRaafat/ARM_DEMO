@@ -16,31 +16,31 @@
 /*                           Global Variables                                */
 /*****************************************************************************/
 
-void updateTime(void);
-void getPressed(void);
+void timeUpdate(void);
+void pressedKeyTx(void);
 void Hsw_task(void);
 void Lcd_task(void);
-void updateState(void);
-void recieveKey(void);
+void appSM(void);
+void pressedKeyRx(void);
 
 const runnable_t runnables[_runsNum] = {
     [timeUpdate_runID] = {
         /*  */
         .period_mS = 6,
-        .callBck = updateTime
+        .callBck = timeUpdate
     },
-    [usartRx_runID] = {
+    [pressedKeyRx_runID] = {
         .period_mS = 3,
-        .callBck = recieveKey
+        .callBck = pressedKeyRx
     },
     [appSM_runID] = {
         .period_mS = 35,
-        .callBck = updateState
+        .callBck = appSM
     },
     [pressedKeyTx_runID] = {
         /* looping over switches and updating currently pressed */
         .period_mS = 40,
-        .callBck = getPressed
+        .callBck = pressedKeyTx
     },
     [hsw_runID] = {
         /* updating states PRESSED/RELEASED of all switches */
