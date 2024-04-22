@@ -1,0 +1,33 @@
+rcc.h
+
+//#define
+
+/*  RTC clk */
+#define CLOCK_LSI               
+#define CLOCK_LSE               
+
+#define RTC_SRC_LSI
+
+
+
+rcc.c
+
+
+
+//#define rcc         (rcc_t*)RCC_BASE  
+/*  CR  */
+// #define HSI_RDY_MASK        0x02
+// #define HSE_RDY_MASK        0x2000
+// #define PLL_RDY_MASK        0x2000000
+// #define PLLI2S_RDY_MASK     0x8000000
+
+#define HSE_BYP_MASK        0x4000
+
+/*  PLL CFG */
+#define PLLM_SHIFT          0       //5 bits (2~63)
+#define PLLN_SHIFT          6       //9 bits (192~432)
+#define PLLP_SHIFT          16      //2 bits (2 4 6 8)
+#define PLL_SRC_MASK        0x400000    //HSI = 0, HSE = 1
+/*  RCC CFG */
+#define SYS_CLK_SET_SHIFT   0
+#define SYS_CLK_GET_MASK    0x0C
