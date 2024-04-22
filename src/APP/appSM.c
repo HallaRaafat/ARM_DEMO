@@ -4,6 +4,10 @@
 
 extern uint64_t stopwatchTime;
 extern uint64_t timestamp;
+
+extern uint8_t year;
+extern uint8_t mon;
+extern uint8_t day;
 extern uint8_t hrs;
 extern uint8_t min;
 extern uint8_t sec;
@@ -15,6 +19,7 @@ uint8_t stopwatchState = STOPWATCH_STATE_RESET;
 uint8_t clockState = CLOCK_STATE_DISPLAY;
 
 uint8_t i_cursor = 0;
+uint8_t cursor_state = CURSOR_STATE_OFF;
 
 uint8_t clock[32] = "Date 12-04-2024 Clock 00:00:00  ";
 uint8_t stopwatch[32] = "  00:00:00.00                   ";
@@ -22,13 +27,20 @@ uint8_t stopwatch[32] = "  00:00:00.00                   ";
 static uint8_t numToAscii(uint8_t num);
 static void incCursor();
 static void decCursor();
-static void setCursorBlink(uint8_t cursor_state);
+// static void setCursorBlink(uint8_t cursor_state);
 static void lcdCBF();
+static void curCBF();
 
 void appSM(){
 
     switch(state){
         case APP_STATE_CLOCK:
+            clock[13] = numToAscii(year / 10);            
+            clock[14] = numToAscii(year % 10);
+            clock[8] = numToAscii(mon / 10);
+            clock[9] = numToAscii(mon % 10);
+            clock[5] = numToAscii(day / 10);
+            clock[6] = numToAscii(day % 10);            
             clock[22] = numToAscii(hrs / 10);
             clock[23] = numToAscii(hrs % 10);
             clock[25] = numToAscii(min / 10);
@@ -43,130 +55,134 @@ void appSM(){
             else{
                 switch(clockState){
                     case CLOCK_STATE_DISPLAY:
-                        setCursorBlink(CURSOR_STATE_OFF);
+                        // setCursorBlink(CURSOR_STATE_OFF);
+                        cursor_state = CURSOR_STATE_OFF;
                         if(pressedKey_id == sw_edit_reset){
                             clockState = CLOCK_STATE_EDIT;
                         }
                         break;
                     case CLOCK_STATE_EDIT:
                     {
-                        setCursorBlink(CURSOR_STATE_ON);
+                        cursor_state = CURSOR_STATE_ON;
+                        // setCursorBlink(CURSOR_STATE_ON);
                         // lcd_setCursorAsync(i_cursor%16,i_cursor/16,NULL);
                         if(pressedKey_id == sw_ok_start){
                             clockState = CLOCK_STATE_DISPLAY;
                         }
                         else if(pressedKey_id == sw_right) {
                             incCursor();
-                            // i_cursor++;
-                            // if(i_cursor == 32){
-                            //     i_cursor = 0;
-                            // }
                         }
                         else if(pressedKey_id == sw_left){
                             decCursor();
-                            // if(i_cursor == 0){
-                            //     i_cursor = 32;
-                            // }
-                            // i_cursor--;
                         }
                         else if(pressedKey_id == sw_up){
-                            if(i_cursor == 22){
-                                if(clock[i_cursor] == 9){
-                                    timestamp -= 9 * 36000000;
-                                }
-                                else {
-                                    timestamp += 36000000;
-                                }
-                            }
-                            else if(i_cursor == 23){
-                                if(clock[i_cursor] == 9){
-                                    timestamp -= 9 * 3600000;
-                                }
-                                else {
-                                    timestamp += 3600000;
-                                }
-                            }
-                            else if(i_cursor == 25){
-                                if(clock[i_cursor] == 9){
-                                    timestamp -= 9 * 600000;
-                                }
-                                else {
-                                    timestamp += 600000;
-                                }
-                            }
-                            else if(i_cursor == 26){
-                                if(clock[i_cursor] == 9){
-                                    timestamp -= 9 * 60000;
-                                }
-                                else {
-                                    timestamp += 60000;
-                                }
-                            }
-                            else if(i_cursor == 28){
-                                if(clock[i_cursor] == 9){
-                                    timestamp -= 9 * 10000;
-                                }
-                                else {
-                                    timestamp += 10000;
-                                }
-                            }
-                            else if(i_cursor == 29){
-                                if(clock[i_cursor] == 9){
-                                    timestamp -= 9 * 1000;
-                                }
-                                else {
-                                    timestamp += 1000;
-                                }
+                            switch (i_cursor){
+                                case 5:
+                                    day += 10;
+                                    break;
+                                case 6:
+                                    day++;
+                                    break;
+                                case 8:
+                                    mon += 10;
+                                    break;
+                                case 9:
+                                    mon++;
+                                    break;
+                                case 13:
+                                    year += 10;
+                                    break;
+                                case 14:
+                                    year++;
+                                    break;
+                                case 22:
+                                    hrs += 10;
+                                    break;
+                                case 23:
+                                    hrs++;
+                                    break;
+                                case 25:
+                                    min += 10;
+                                    break;
+                                case 26:
+                                    min++;
+                                    break;
+                                case 28:
+                                    sec += 10;
+                                    break;
+                                case 29:
+                                    sec++;
+                                    break;
                             }
                         }
                         else if(pressedKey_id == sw_down){
-                            if(i_cursor == 22){
-                                if(clock[i_cursor] == 0){
-                                    timestamp += 9 * 36000000;
-                                }
-                                else {
-                                    timestamp -= 36000000;
-                                }
-                            }
-                            else if(i_cursor == 23){
-                                if(clock[i_cursor] == 0){
-                                    timestamp += 9 * 3600000;
-                                }
-                                else {
-                                    timestamp -= 3600000;
-                                }
-                            }
-                            else if(i_cursor == 25){
-                                if(clock[i_cursor] == 0){
-                                    timestamp += 9 * 600000;
-                                }
-                                else {
-                                    timestamp -= 600000;
-                                }
-                            }
-                            else if(i_cursor == 26){
-                                if(clock[i_cursor] == 0){
-                                    timestamp += 9 * 60000;
-                                }
-                                else {
-                                    timestamp -= 60000;
-                                }
-                            }
-                            else if(i_cursor == 28){
-                                if(clock[i_cursor] == 0){
-                                    timestamp += 9 * 10000;
-                                }
-                                else {
-                                    timestamp -= 10000;
-                                }
-                            }
-                            else if(i_cursor == 29){
-                                if(clock[i_cursor] == 0){
-                                    timestamp += 9 * 1000;
-                                }
-                                else {
-                                    timestamp -= 1000;
-                                }
+                            switch (i_cursor){
+                                case 5:
+                                    if(day > 9){
+                                        day -= 10;
+                                    }
+                                    else{
+                                        day += 30;
+                                    }                                    
+                                    break;
+                                case 6:
+                                    if(day > 0){
+                                        day--;
+                                    }
+                                    else{
+                                        day += 9;
+                                    }
+                                    break;
+                                case 8:
+                                    if(mon > 9){
+                                        mon -= 10;
+                                    }
+                                    else{
+                                        mon += 10;
+                                    }
+                                    break;
+                                case 9:
+                                    if(mon > 0){
+                                        mon--;
+                                    }
+                                    else{
+                                        mon += 9;
+                                    }
+                                    break;
+                                case 13:
+                                    if(year > 9){
+                                        year -= 10;
+                                    }
+                                    else{
+                                        year += 90;
+                                    }
+                                    break;
+                                case 14:
+                                    if(year > 0){
+                                        year --;
+                                    }
+                                    else{
+                                        year += 9;
+                                    }
+                                    break;
+                                case 22:
+                                    hrs -= 10;
+                                    break;
+                                case 23:
+                                    hrs--;
+                                    break;
+                                case 25:
+                                    min -= 10;
+                                    break;
+                                case 26:
+                                    min--;
+                                    break;
+                                case 28:
+                                    sec -= 10;
+                                    break;
+                                case 29:
+                                    sec--;
+                                    break;
                             }
                         }
                     }
@@ -184,7 +200,8 @@ void appSM(){
             stopwatch[11] = numToAscii(((stopwatchTime / 10) % 100) / 10);
             stopwatch[12] = numToAscii(((stopwatchTime / 10) % 100) % 10);
             lcd_writeStringXYAsync(stopwatch,32,0,0,NULL);
-            setCursorBlink(CURSOR_STATE_OFF);
+            // setCursorBlink(CURSOR_STATE_OFF);
+            cursor_state = CURSOR_STATE_OFF;
             if(pressedKey_id == sw_mode){
                 state = APP_STATE_CLOCK;
             }
@@ -222,12 +239,15 @@ void appSM(){
 
 
 static void lcdCBF(){
-    lcd_setCursorAsync(i_cursor%16,i_cursor/16,NULL);
+    lcd_setCursorAsync(i_cursor%16,i_cursor/16,curCBF);
 }
-
-static void setCursorBlink(uint8_t cursor_state){
+static void curCBF(){
     lcd_blinkCursorAsync(cursor_state,NULL);
 }
+
+// static void setCursorBlink(uint8_t cursor_state){
+//     // lcd_blinkCursorAsync(cursor_state,NULL);
+// }
 static void incCursor(){
     i_cursor++;
     if(i_cursor == 32){

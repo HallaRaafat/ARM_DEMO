@@ -5,7 +5,7 @@
 
 extern uint8_t pressedKey_id;
 
-uint8_t currentPressed_flag = 0;
+// uint8_t currentPressed_flag = 0;
 void txCBF(void);
 
 /* work at released */

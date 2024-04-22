@@ -258,12 +258,13 @@ static void blinkCursor(){
 }
 void lcd_blinkCursorAsync(uint8_t cursor_state, callback_t callback_blinkCursor){
     if(usrReq.reqState != lcdReqState_inProgress){
+        usrReq.reqState = lcdReqState_inProgress;
+        usrReq.reqType = reqType_blinkCursor;
+        
         lcdCfg.cursor = cursor_state;
         lcdCfg.blink = cursor_state;
 
         usrReq.reqCallback = callback_blinkCursor;
-        usrReq.reqType = reqType_blinkCursor;
-        usrReq.reqState = lcdReqState_inProgress;
     }
 }
 static void clearScreen(){

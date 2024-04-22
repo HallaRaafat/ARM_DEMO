@@ -26,11 +26,11 @@ void pressedKeyRx(void);
 const runnable_t runnables[_runsNum] = {
     [timeUpdate_runID] = {
         /*  */
-        .period_mS = 6,
+        .period_mS = 2,
         .callBck = timeUpdate
     },
     [pressedKeyRx_runID] = {
-        .period_mS = 3,
+        .period_mS = 1,
         .callBck = pressedKeyRx
     },
     [appSM_runID] = {

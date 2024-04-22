@@ -78,8 +78,8 @@ lcdCfg_t lcdCfg = {
     .cursor_dir = LCD_CURSOR_DIR_INC,
     .disp_shift = LCD_DISP_SHIFT_OFF,
     .display = LCD_DISPLAY_ON,
-    .cursor = LCD_CURSOR_ON,
-    .blink = LCD_BLINK_ON
+    .cursor = LCD_CURSOR_OFF,
+    .blink = LCD_BLINK_OFF
 }; 
 
 /*****************************************************************************/
