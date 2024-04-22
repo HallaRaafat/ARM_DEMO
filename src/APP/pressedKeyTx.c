@@ -39,7 +39,7 @@ void pressedKeyTx(){
         hsw_getState(prev_pressed,&SW_state);
         if(SW_state == SW_STATE_RELEASED){
             pressedKey_sendId = prev_pressed /*+ '0'*/;
-            // pressedKey_id = prev_pressed;
+            pressedKey_id = prev_pressed;
             USART_SendBufferAsync(&Tx);
             prev_pressed = _swsNum;
         }

@@ -78,40 +78,100 @@ void appSM(){
                         else if(pressedKey_id == sw_up){
                             switch (i_cursor){
                                 case 5:
-                                    day += 10;
+                                    if(day < 30){
+                                        day += 10;
+                                    }
+                                    else{
+                                        day -= 30;
+                                    }                                    
                                     break;
                                 case 6:
-                                    day++;
+                                    if((day % 10) != 9){
+                                        day++;
+                                    }
+                                    else{
+                                        day -= 9;
+                                    }
                                     break;
                                 case 8:
-                                    mon += 10;
+                                    if(mon < 12){
+                                        mon += 10;
+                                    }
+                                    else{
+                                        mon -= 10;
+                                    }
                                     break;
                                 case 9:
-                                    mon++;
+                                    if((mon % 10) != 9){
+                                        mon++;
+                                    }
+                                    else{
+                                        mon -= 9;
+                                    }
                                     break;
                                 case 13:
-                                    year += 10;
+                                    if(year < 90){
+                                        year += 10;
+                                    }
+                                    else{
+                                        year -= 90;
+                                    }
                                     break;
                                 case 14:
-                                    year++;
+                                    if((year % 10) != 9){
+                                        year++;
+                                    }
+                                    else{
+                                        year -= 9;
+                                    }
                                     break;
                                 case 22:
-                                    hrs += 10;
+                                    if(hrs < 20){
+                                        hrs += 10;
+                                    }
+                                    else{
+                                        hrs -= 20;
+                                    }                                    
                                     break;
                                 case 23:
-                                    hrs++;
+                                    if((hrs % 10) != 9){
+                                        hrs++;
+                                    }
+                                    else {
+                                        hrs -= 9;
+                                    }
                                     break;
                                 case 25:
-                                    min += 10;
+                                    if(min < 50){
+                                        min += 10;
+                                    }
+                                    else{
+                                        min -= 50;
+                                    }
                                     break;
                                 case 26:
-                                    min++;
+                                    if((min % 10) != 9){
+                                        min++;
+                                    }
+                                    else {
+                                        min -= 9;
+                                    }
                                     break;
                                 case 28:
-                                    sec += 10;
+                                    if(sec < 50){
+                                        sec += 10;
+                                    }
+                                    else{
+                                        sec -= 50;
+                                    }
                                     break;
                                 case 29:
-                                    sec++;
+                                    if((sec % 10) != 9){
+                                        sec++;
+                                    }
+                                    else {
+                                        sec -= 9;
+                                    }
                                     break;
                             }
                         }
@@ -126,7 +186,7 @@ void appSM(){
                                     }                                    
                                     break;
                                 case 6:
-                                    if(day > 0){
+                                    if((day % 10) != 0){
                                         day--;
                                     }
                                     else{
@@ -142,7 +202,7 @@ void appSM(){
                                     }
                                     break;
                                 case 9:
-                                    if(mon > 0){
+                                    if((mon % 10) != 0){
                                         mon--;
                                     }
                                     else{
@@ -158,7 +218,7 @@ void appSM(){
                                     }
                                     break;
                                 case 14:
-                                    if(year > 0){
+                                    if((year % 10) != 0){
                                         year --;
                                     }
                                     else{
@@ -166,22 +226,52 @@ void appSM(){
                                     }
                                     break;
                                 case 22:
-                                    hrs -= 10;
+                                    if(hrs > 9){
+                                        hrs -= 10;
+                                    }
+                                    else{
+                                        hrs += 20;
+                                    }                                    
                                     break;
                                 case 23:
-                                    hrs--;
+                                    if((hrs % 10) != 0){
+                                        hrs--;
+                                    }
+                                    else {
+                                        hrs += 9;
+                                    }
                                     break;
                                 case 25:
-                                    min -= 10;
+                                    if(min > 9){
+                                        min -= 10;
+                                    }
+                                    else{
+                                        min += 50;
+                                    }
                                     break;
                                 case 26:
-                                    min--;
+                                    if((min % 10) != 0){
+                                        min--;
+                                    }
+                                    else {
+                                        min += 9;
+                                    }
                                     break;
                                 case 28:
-                                    sec -= 10;
+                                    if(sec > 9){
+                                        sec -= 10;
+                                    }
+                                    else{
+                                        sec += 50;
+                                    }
                                     break;
                                 case 29:
-                                    sec--;
+                                    if((sec % 10) != 0){
+                                        sec--;
+                                    }
+                                    else {
+                                        sec += 9;
+                                    }
                                     break;
                             }
                         }
