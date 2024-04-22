@@ -325,6 +325,7 @@ void appSM(){
             break;     
     }
     // USART_ReceiveBufferAsync(&Rx);
+    pressedKey_id = _swsNum;
 }
 
 

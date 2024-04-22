@@ -29,10 +29,10 @@ const runnable_t runnables[_runsNum] = {
         .period_mS = 2,
         .callBck = timeUpdate
     },
-    [pressedKeyRx_runID] = {
-        .period_mS = 1,
-        .callBck = pressedKeyRx
-    },
+    // [pressedKeyRx_runID] = {
+    //     .period_mS = 1,
+    //     .callBck = pressedKeyRx
+    // },
     [appSM_runID] = {
         .period_mS = 35,
         .callBck = appSM

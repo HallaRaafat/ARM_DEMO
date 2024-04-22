@@ -4,8 +4,6 @@
 #include"MCAL/USART/USART.h"
 
 extern uint8_t pressedKey_id;
-
-// uint8_t currentPressed_flag = 0;
 void txCBF(void);
 
 /* work at released */
@@ -29,21 +27,14 @@ void pressedKeyTx(){
             prev_pressed = i;
         }
     }
-    if(pressed_flag ||(prev_pressed == _swsNum)){
-        // USART_SendBufferAsync(&Tx);
-        // pressedKey_id = pressedKey_sendId;
-        pressedKey_sendId = _swsNum;
-        pressedKey_id = _swsNum;
+    if(pressed_flag){
+        pressedKey_sendId = prev_pressed;
+      //  pressedKey_id = _swsNum;
     }
-    else if((!pressed_flag) && (prev_pressed != _swsNum)) { /* currently sw released but previously was pressed */
-        hsw_getState(prev_pressed,&SW_state);
-        if(SW_state == SW_STATE_RELEASED){
-            pressedKey_sendId = prev_pressed /*+ '0'*/;
-            // pressedKey_id = prev_pressed;
-            USART_SendBufferAsync(&Tx);
-            prev_pressed = _swsNum;
-        }
-    } 
+    else { 
+        pressedKey_sendId = _swsNum /*+ '0'*/;            
+    }
+    USART_SendBufferAsync(&Tx);
 }
 
 void txCBF(void){

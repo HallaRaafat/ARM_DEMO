@@ -7,7 +7,8 @@
 #include"MCAL/GPIO/gpio.h"
 #include"MCAL/NVIC/nvic.h"
 #include"MCAL/USART/USART.h"
-
+uint8_t rxBuffer;
+void rxCBF();
 int main(){
 
     rcc_enableClk(CLOCK_HSI);
@@ -47,10 +48,15 @@ int main(){
     nvic_enableInt(IRQ_USART1);
 
 	USART_Init();
-	
+	 User_Request_t Rx;
+    Rx.Ptr_Buffer = &rxBuffer;
+ 	Rx.USART_Num = USART_1;
+ 	Rx.CallBack = rxCBF;
+    Rx.Length = 1;
     hsw_init();
     lcd_initAsync();
-
+   
+    USART_ReceiveBufferAsync(&Rx);
     sched_init();
     sched_start();
 }

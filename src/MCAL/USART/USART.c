@@ -403,7 +403,7 @@ void USART1_IRQHandler(void)
 	   //RX Flag
 	 	   if (USART_Ptr->SR & USART_RXNE_FLAG_MASK)
 	 		{
-	 		   if(RxReq[REQ_IDX].state== STATE_BUSY)
+	 		   //if(RxReq[REQ_IDX].state== STATE_BUSY)
 	 		   {
 	 			   if (RxReq[REQ_IDX].Pos< RxReq[REQ_IDX].Size)
 	 			   {
@@ -413,7 +413,8 @@ void USART1_IRQHandler(void)
 	 				   RxReq[REQ_IDX].Pos++;
 					   if(RxReq[REQ_IDX].Pos == RxReq[REQ_IDX].Size){
 						//disable inturrpt
-	 				   USART_Ptr->CR1&=~ USART_RXNEIE_ENABLE_MASK;
+	 				   //USART_Ptr->CR1&=~ USART_RXNEIE_ENABLE_MASK;
+					   RxReq[REQ_IDX].Pos=0;
 	 				   // TXreq ready
 	 				   RxReq[REQ_IDX].state=STATE_READY;
 	 				   //call callback func
