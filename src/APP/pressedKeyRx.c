@@ -20,7 +20,8 @@ void pressedKeyRx(void){
 
 
 void rxCBF(){
-    if((rxBuffer > 0) && (rxBuffer < _swsNum)){
+    // static uint8_t
+    if((rxBuffer >= 0) && (rxBuffer < _swsNum)){
         pressedKey_id = rxBuffer;
     }
 }
