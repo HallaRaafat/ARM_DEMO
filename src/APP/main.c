@@ -3,7 +3,10 @@
 #include"MCAL/USART/USART.h"
 #include"MCAL/GPIO/gpio.h"
 #include"HAL/LED/led.h"
+#include"HAL/H_SW/H_sw.h"
+#include"SCHED/sched.h"
 #include<stdint.h>
+#include"APP/app.h"
 
 User_Request_t Tx;
 User_Request_t RX;
@@ -13,20 +16,36 @@ uint8_t flag = 0;
 uint8_t Arr=0x01;
 uint8_t Rx_Arr[6]={0};
 
+extern ledCfg_t leds[_ledsNum];
+// extern swCfg_t switches [_swsNum];
+
 void rxcbf1(){
-    // if(Rx_Arr[0]==0x01){
-    //     USART_SendBufferAsync(&Tx);
-    // }
-    // Arr[0] = Rx_Arr[0];
-    // if((Rx_Arr[0]==0x05)&&(Rx_Arr[1]==0x01)&&(Rx_Arr[5]==0x5)){
-    //     USART_SendBufferAsync(&Tx);
-    // }
-    if(Rx_Arr[0]==0x99){
+    Arr = 0xFF;
+    if(Rx_Arr[0] == FRAME_START){
         switch (Rx_Arr[1]){
-            case 0x05:
+            case GPIO_MOD:
                 switch(Rx_Arr[2]){
-                    case 0x01:
-                        Arr = led_setState(Rx_Arr[3],Rx_Arr[4]);
+                    case GPIO_SET:
+                        Arr = gpio_setPinValue(0x40020000+(Rx_Arr[4]*0x400),Rx_Arr[3],Rx_Arr[5]);
+                        break;
+                    case GPIO_GET:
+                        gpio_getPinValue(0x40020000+(Rx_Arr[4]*0x400),Rx_Arr[3],&Arr);
+                        break;
+                }
+                break;
+            case LED_MOD:
+                switch(Rx_Arr[2]){
+                    case LED_SET:
+                        led_setState(Rx_Arr[3],Rx_Arr[4]);
+                        gpio_getPinValue(leds[Rx_Arr[3]].port,leds[Rx_Arr[3]].pin,&Arr);
+                        Arr ^= leds[Rx_Arr[3]].led_connection;                        
+                        break;
+                }
+                break;
+            case SW_MOD:
+                switch(Rx_Arr[2]){
+                    case SW_GET:
+                        hsw_getState(Rx_Arr[3],&Arr);                       
                         break;
                 }
                 break;
@@ -89,23 +108,9 @@ int main(){
     RX.Length=5;
 
     led_init();
+    hsw_init();
 	USART_Init();
-	// USART_SendByte(&Tx);
-	// USART_GetByte(&Rx);
-    // USART_SendBufferAsync(&Tx);
     USART_ReceiveBufferAsync(&RX);
-	//USART_SendByte(&Tx);
-
-   while(1)
-    {
-        // // USART_SendByte(&Tx);
-        // if (flag == 1)	{
-        // 		// flag = 0;
-        //         led_setState(led_1,LED_STATE_ON);
-        // }
-        // else
-        // {
-        // 	led_setState(led_1,LED_STATE_OFF);
-        // }
-    }
+	sched_init();
+    sched_start();   
 }

@@ -24,34 +24,34 @@ void appSM(void);
 void pressedKeyRx(void);
 
 const runnable_t runnables[_runsNum] = {
-    [timeUpdate_runID] = {
-        /*  */
-        .period_mS = 2,
-        .callBck = timeUpdate
-    },
-    // [pressedKeyRx_runID] = {
-    //     .period_mS = 1,
-    //     .callBck = pressedKeyRx
+    // [timeUpdate_runID] = {
+    //     /*  */
+    //     .period_mS = 2,
+    //     .callBck = timeUpdate
     // },
-    [appSM_runID] = {
-        .period_mS = 35,
-        .callBck = appSM
-    },
-    [pressedKeyTx_runID] = {
-        /* looping over switches and updating currently pressed */
-        .period_mS = 40,
-        .callBck = pressedKeyTx
-    },
+    // // [pressedKeyRx_runID] = {
+    // //     .period_mS = 1,
+    // //     .callBck = pressedKeyRx
+    // // },
+    // [appSM_runID] = {
+    //     .period_mS = 35,
+    //     .callBck = appSM
+    // },
+    // [pressedKeyTx_runID] = {
+    //     /* looping over switches and updating currently pressed */
+    //     .period_mS = 40,
+    //     .callBck = pressedKeyTx
+    // },
     [hsw_runID] = {
         /* updating states PRESSED/RELEASED of all switches */
         .period_mS = 8,
         .callBck = Hsw_task
-    },
-    [lcd_runID] = {
-        /* LCD */
-        .period_mS = 2,
-        .callBck = Lcd_task
     }
+    // [lcd_runID] = {
+    //     /* LCD */
+    //     .period_mS = 2,
+    //     .callBck = Lcd_task
+    // }
 };
 
 /*****************************************************************************/

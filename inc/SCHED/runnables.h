@@ -15,12 +15,12 @@
 /*                              Types                                        */
 /*****************************************************************************/
 typedef enum {
-    timeUpdate_runID,
+    // timeUpdate_runID,
     // pressedKeyRx_runID,
-    appSM_runID,
-    pressedKeyTx_runID,
+    // appSM_runID,
+    // pressedKeyTx_runID,
     hsw_runID,
-    lcd_runID,
+    // lcd_runID,
     _runsNum
 }runnables_t;
 

@@ -17,11 +17,11 @@
 /*                           Global Variables                                */
 /*****************************************************************************/
 const swCfg_t switches[_swsNum] = {
-    // [sw_up] = {
-    //     .port = PORT_A,
-    //     .pin = PIN_4,
-    //     .sw_connection = SW_CONNECTION_PULLUP
-    // },
+    [sw_1] = {
+        .port = PORT_A,
+        .pin = PIN_4,
+        .sw_connection = SW_CONNECTION_PULLUP
+    }
     // [sw_down] = {
     //     .port = PORT_A,
     //     .pin = PIN_5,

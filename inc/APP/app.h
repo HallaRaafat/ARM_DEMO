@@ -5,13 +5,21 @@
 
 #define NULL        (void*)0
 
-#define APP_STATE_CLOCK                 0
-#define APP_STATE_STOPWATCH             1
+#define FRAME_START 0x99
 
-#define CLOCK_STATE_DISPLAY             2
-#define CLOCK_STATE_EDIT                3
-#define STOPWATCH_STATE_RESET           4
-#define STOPWATCH_STATE_RUN             5
-#define STOPWATCH_STATE_PAUSE           6
+#define GPIO_MOD    0x01
+#define GPIO_SET    0x01
+#define GPIO_GET    0x02
+
+#define SW_MOD      0x04
+#define SW_GET      0x01
+
+#define LED_MOD     0x05
+#define LED_SET     0x01
+
+// #define GPIO_PORT_A     0
+// #define GPIO_PORT_B     1
+// #define GPIO_PORT_C     2
+// #define GPIO_PORT_D     3
 
 #endif 
