@@ -23,7 +23,7 @@ typedef struct
 /*                           Global Variables                                */
 /*****************************************************************************/
 extern const swCfg_t switches [_swsNum];
-static swData_t swData[_swsNum] = {0};
+static swData_t swData[_swsNum]/* = {0}*/;
 
 /*****************************************************************************/
 /*                      Static Function Prototypes                           */
@@ -89,6 +89,6 @@ uint8_t hsw_getState(uint8_t sw, uint8_t* sw_state) {
         *sw_state = swData[sw].state;
         errorStatus = RETURN_SW_OK;
     }    
-    return errorStatus;
+    return swData[sw].state;
 }
 

@@ -1,13 +1,14 @@
 /*****************************************************************************/
 /*                              Includes                                     */
 /*****************************************************************************/
-#include "HAL/SW/sw_cfg.h"
-#include "HAL/SW/sw.h"
+#include "HAL/LED/led_cfg.h"
+#include "HAL/LED/led.h"
 #include "MCAL/GPIO/gpio.h"
 
 /*****************************************************************************/
 /*                              Defines                                      */
 /*****************************************************************************/
+
 
 /*****************************************************************************/
 /*                              Types                                        */
@@ -16,41 +17,25 @@
 /*****************************************************************************/
 /*                           Global Variables                                */
 /*****************************************************************************/
-const swCfg_t switches[_swsNum] = {
-    // [sw_up] = {
-    //     .port = PORT_A,
-    //     .pin = PIN_4,
-    //     .sw_connection = SW_CONNECTION_PULLUP
+const ledCfg_t leds[_ledsNum] = {
+    [led_1] = {
+        .port = PORT_B,
+        .pin = PIN_8,
+        .led_connection = LED_CONNECTION_REVERSE,
+        .led_state = LED_STATE_OFF
+    }
     // },
-    // [sw_down] = {
-    //     .port = PORT_A,
-    //     .pin = PIN_5,
-    //     .sw_connection = SW_CONNECTION_PULLUP
-    // },
-    // [sw_right] = {
-    //     .port = PORT_A,
-    //     .pin = PIN_3,
-    //     .sw_connection = SW_CONNECTION_PULLUP
-    // },
-    // [sw_left] = {
-    //     .port = PORT_A,
-    //     .pin = PIN_6,
-    //     .sw_connection = SW_CONNECTION_PULLUP
-    // },
-    // [sw_edit_reset] = {
+    // [led_green] = {
     //     .port = PORT_A,
     //     .pin = PIN_2,
-    //     .sw_connection = SW_CONNECTION_PULLUP
+    //     .led_connection = LED_CONNECTION_FORWARD,
+    //     .led_state = LED_STATE_ON
     // },
-    // [sw_ok_start] = {
-    //     .port = PORT_A,
-    //     .pin = PIN_1,
-    //     .sw_connection = SW_CONNECTION_PULLUP
-    // },
-    // [sw_mode] = {
-    //     .port = PORT_A,
-    //     .pin = PIN_0,
-    //     .sw_connection = SW_CONNECTION_PULLUP
+    // [led_yellow] = {
+    //     .port = PORT_B,
+    //     .pin = PIN_7,
+    //     .led_connection = LED_CONNECTION_REVERSE,
+    //     .led_state = LED_STATE_ON
     // }
 };
 
